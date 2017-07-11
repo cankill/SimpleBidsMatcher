@@ -10,6 +10,7 @@ import ru.fan.stockexchange.services.parser.FilesParser.{clientBuilder, orderBui
 import ru.fan.stockexchange.services.stockexchange.StockExchange
 
 object SimpleScalaMatcher extends App with LazyLogging {
+
   val parser = new scopt.OptionParser[CmdLineOptions]("java -jar pathToJar/simplestackexchange_2.12-1.0.jar") {
     head("SimpleScalaMatcher", "1.0")
 

@@ -5,7 +5,6 @@ import java.io.BufferedReader
 import ru.fan.stockexchange.model.{Client, Order}
 
 import scala.util.{Failure, Success, Try}
-
 import scala.language.implicitConversions
 
 object FilesParser {
