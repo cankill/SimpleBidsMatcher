@@ -1,8 +1,8 @@
-package ru.fan.bidmatcher
+package ru.fan.stockexchange
 
 import org.scalatest.FunSuite
-import ru.fan.bidmatcher.model._
-import ru.fan.bidmatcher.services.stockexchange.StockExchange
+import ru.fan.stockexchange.model._
+import ru.fan.stockexchange.services.stockexchange.StockExchange
 
 class ExchangeTest extends FunSuite {
   val testClient1 = Client("C1", 1000, Map(A->10, B->20, C->30, D->40))
@@ -24,11 +24,8 @@ class ExchangeTest extends FunSuite {
   test("Exchange creation") {
     val exchange: StockExchange with Load with Save = new StockExchange with Load with Save {
       override def sell: (String, Stock, Int) => Unit = ???
-
       override def buy: (String, Stock, Int) => Unit = ???
-
       override def debit: (String, Int) => Unit = ???
-
       override def credit: (String, Int) => Unit = ???
     }
 
@@ -36,17 +33,14 @@ class ExchangeTest extends FunSuite {
 
     val saved = exchange.save
 
-    assert(saved == clients)
+    assert(saved === clients)
   }
 
   test("Exchange clients creation exception") {
     val exchange: StockExchange with Load with Save = new StockExchange with Load with Save {
       override def sell: (String, Stock, Int) => Unit = ???
-
       override def buy: (String, Stock, Int) => Unit = ???
-
       override def debit: (String, Int) => Unit = ???
-
       override def credit: (String, Int) => Unit = ???
     }
 
@@ -57,27 +51,37 @@ class ExchangeTest extends FunSuite {
     assert(thrown.getMessage === s"""Client with id: C1 is already added""")
   }
 
-  test("Exchange process") {
-    val exchange: StockExchange with Load with Save = new StockExchange with Load with Save with Buy with Sell with Credit with Debit
+  test("Exchange load/process") {
+    val exchange: StockExchange with Load with Save with CheckSumm = new StockExchange with Load with Save with Buy with Sell with Credit with Debit with CheckSumm
 
     exchange.load(clients)
+
+    val checksum1 = exchange.checkSumm
 
     exchange.process(orders)
 
+    val checksum2 = exchange.checkSumm
+
     val saved = exchange.save
 
-    assert(saved == clientsm)
+    assert(saved === clientsm)
+    assert(checksum1 === checksum2)
   }
 
   test("Exchange process ignore buy/sell to self") {
-    val exchange: StockExchange with Load with Save = new StockExchange with Load with Save with Buy with Sell with Credit with Debit
+    val exchange: StockExchange with Load with Save with CheckSumm = new StockExchange with Load with Save with Buy with Sell with Credit with Debit with CheckSumm
 
     exchange.load(clients)
 
+    val checksum1 = exchange.checkSumm
+
     exchange.process(orders3)
+
+    val checksum2 = exchange.checkSumm
 
     val saved = exchange.save
 
-    assert(saved == clientsm)
+    assert(saved === clientsm)
+    assert(checksum1 === checksum2)
   }
 }
