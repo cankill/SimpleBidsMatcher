@@ -1,0 +1,9 @@
+C1	b	A	10	1
+C2	s	B	10	2
+C3	b	C	10	3
+C4	s	D	10	4
+C5	b	D	10	4
+C6	s	C	10	3
+C7	b	B	10	2
+C8	s	A	10	1
+C9	b	A	10	1

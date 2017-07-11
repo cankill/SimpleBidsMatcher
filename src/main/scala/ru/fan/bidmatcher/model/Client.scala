@@ -7,7 +7,12 @@ case object C extends Stock
 case object D extends Stock
 
 
-case class Client(id: String, balance: Int, stoks: Stock Map Int)
+case class Client(id: String, balance: Int, stocks: Stock Map Int) {
+  def asString: String = {
+    val stocksS = stocks.map(s => (s._1.getClass.getName, s._2)).toSeq.sortBy(_._1).map(_._2).mkString("\t")
+    s"$id\t$balance\t$stocksS"
+  }
+}
 
 object Client {
   def apply(id: String, balance: String, a: String, b: String, c: String, d: String): Client = {

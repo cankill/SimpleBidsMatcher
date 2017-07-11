@@ -3,6 +3,10 @@ package ru.fan
 import java.io.{BufferedReader, Closeable}
 import java.nio.file.{Path, Paths}
 
+import ru.fan.bidmatcher.model._
+import ru.fan.bidmatcher.services.stockexchange.StockExchange
+
+import scala.collection.mutable.Queue
 import scala.language.implicitConversions
 
 package object bidmatcher {
@@ -55,4 +59,12 @@ package object bidmatcher {
     if(bufferedReader.ready()) bufferedReader.readLine() #:: toScalaStream(bufferedReader)
     else Stream.empty
   }
+
+  type IdMapClient = String Map Client
+  val IdMapClient: IdMapClient = Map.empty
+
+  type Stack = StockKey Map Queue[Order]
+
+
+  type MyStockExchange = StockExchange with Load with Save with Buy with Sell with Credit with Debit with CheckSumm
 }
