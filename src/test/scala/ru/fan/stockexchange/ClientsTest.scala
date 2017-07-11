@@ -1,7 +1,7 @@
-package ru.fan.bidmatcher
+package ru.fan.stockexchange
 
 import org.scalatest.{FlatSpec, FunSuite, Matchers}
-import ru.fan.bidmatcher.model._
+import ru.fan.stockexchange.model._
 
 class ClientsTest extends FunSuite {
   val testClient1 = Client("C1", 1000, Map(A->10, B->20, C->30, D->40))

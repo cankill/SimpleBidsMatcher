@@ -1,4 +1,4 @@
-package ru.fan.bidmatcher.model
+package ru.fan.stockexchange.model
 
 case class Order(clientId: String, typ: OrderType, stock: Stock, price: Int, amount: Int)
 

@@ -1,4 +1,4 @@
-package ru.fan.bidmatcher.configure
+package ru.fan.stockexchange.configure
 
 import java.io.File
 import java.nio.file.{Path, Paths}

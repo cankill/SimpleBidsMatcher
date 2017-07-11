@@ -1,4 +1,4 @@
-package ru.fan.bidmatcher.model
+package ru.fan.stockexchange.model
 
 sealed trait Stock
 case object A extends Stock

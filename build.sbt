@@ -1,5 +1,5 @@
 
-name := "SimpleBidsMatcher"
+name := "SimpleStackExchange"
 
 version := "1.0"
 

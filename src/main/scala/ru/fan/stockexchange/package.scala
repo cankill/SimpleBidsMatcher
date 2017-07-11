@@ -1,15 +1,16 @@
 package ru.fan
 
-import java.io.{BufferedReader, Closeable}
+import java.io.Closeable
 import java.nio.file.{Path, Paths}
 
-import ru.fan.bidmatcher.model._
-import ru.fan.bidmatcher.services.stockexchange.StockExchange
+import ru.fan.stockexchange.model._
+import ru.fan.stockexchange.services.stockexchange.StockExchange
 
-import scala.collection.mutable.Queue
+import scala.collection.mutable
 import scala.language.implicitConversions
 
-package object bidmatcher {
+package object stockexchange {
+  // Implicit builder for java.nio.file.Path for scopt library
   implicit val pathRead: scopt.Read[Path] = scopt.Read.reads {p => Paths.get(p)}
   
   trait Managed[T] {
@@ -20,17 +21,18 @@ package object bidmatcher {
     }
   }
 
+  // Implementation of a managed resource block like java try-with-resource
   def using[T <: Any, R](managed: Managed[T])(block: T => R): R = {
     val resource = managed.onEnter()
     var exception = false
     try {
       block(resource)
     } catch  {
-      case t:Throwable => {
+      case t:Throwable =>
         exception = true
         managed.onExit(t)
         throw t
-      }
+        
     } finally {
       if (!exception) {
         managed.onExit()
@@ -55,16 +57,13 @@ package object bidmatcher {
     new ManagedClosable(closable)
   }
 
-  implicit def toScalaStream(bufferedReader: BufferedReader): Stream[String] = {
-    if(bufferedReader.ready()) bufferedReader.readLine() #:: toScalaStream(bufferedReader)
-    else Stream.empty
-  }
-
+  // Custom types helpers
   type IdMapClient = String Map Client
   val IdMapClient: IdMapClient = Map.empty
 
-  type Stack = StockKey Map Queue[Order]
+  type StockKey = (Stock, Int, Int)
 
+  type Stack = StockKey Map mutable.Queue[Order]
 
   type MyStockExchange = StockExchange with Load with Save with Buy with Sell with Credit with Debit with CheckSumm
 }
